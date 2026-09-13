@@ -397,10 +397,17 @@ function App() {
   // Theme Management
   useEffect(() => {
     document.querySelector("html").classList.remove("light", "dark");
-
     document.querySelector("html").classList.add(themeMode);
-
     localStorage.setItem("themeMode", themeMode);
+
+    // Update theme-color meta tag dynamically to match the app's top gradient color
+    let metaThemeColor = document.querySelector("meta[name=theme-color]");
+    if (!metaThemeColor) {
+      metaThemeColor = document.createElement("meta");
+      metaThemeColor.name = "theme-color";
+      document.head.appendChild(metaThemeColor);
+    }
+    metaThemeColor.content = themeMode === "dark" ? "#3a3532" : "#c8b3a6";
   }, [themeMode]);
 
   const filteredTasks = getFilteredTasks();

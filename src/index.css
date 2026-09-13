@@ -3,21 +3,28 @@
 
 html,
 body {
-  background: linear-gradient(135deg, #c8b3a6 0%, #aabdb5 52%, #749f99 100%);
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  overflow: hidden;
+  background-color: #c8b3a6; /* Matches the light theme color */
+}
+
+/* For dark mode fallback */
+html.dark {
+  background-color: #3a3532;
 }
 
 body {
-  height: 100dvh;
-  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
   margin: 0;
   padding: 0;
 }
+
 #root {
-  height: 100dvh;
+  height: 100%;
   width: 100%;
   background-color: transparent;
 }

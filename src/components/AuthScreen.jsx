@@ -180,14 +180,14 @@ const AuthScreen = () => {
 
   return (
     <div className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-md overflow-y-auto perspective-[1000px]">
-      <div className="flex min-h-full items-center justify-center p-4">
+      <div className="flex min-h-[100dvh] items-center justify-center p-4">
         {/* 3D Flip Container */}
         <div
-          className={`relative w-full max-w-md transition-transform duration-700 preserve-3d ${isFlipped ? "rotate-y-180" : ""}`}
+          className={`relative w-full max-w-md transition-transform duration-700 preserve-3d grid ${isFlipped ? "rotate-y-180" : ""}`}
         >
           {/* --- FRONT: LOGIN --- */}
           <div
-            className={`absolute inset-0 w-full backface-hidden transition-all duration-500 ${isFlipped ? "opacity-0 pointer-events-none" : "opacity-100"}`}
+            className={`[grid-area:1/1] self-center w-full backface-hidden transition-all duration-500 ${isFlipped ? "opacity-0 pointer-events-none" : "opacity-100"}`}
           >
             <div className="bg-white/10 dark:bg-black/60 backdrop-blur-2xl rounded-3xl border border-white/20 dark:border-white/10 shadow-2xl p-8 relative overflow-hidden">
               {/* Glow effect */}
@@ -347,7 +347,7 @@ const AuthScreen = () => {
 
           {/* --- BACK: SIGNUP --- */}
           <div
-            className={`w-full rotate-y-180 backface-hidden transition-all duration-500 ${!isFlipped ? "opacity-0 pointer-events-none" : "opacity-100"}`}
+            className={`[grid-area:1/1] self-center w-full rotate-y-180 backface-hidden transition-all duration-500 ${!isFlipped ? "opacity-0 pointer-events-none" : "opacity-100"}`}
           >
             <div className="bg-white/10 dark:bg-black/60 backdrop-blur-2xl rounded-3xl border border-white/20 dark:border-white/10 shadow-2xl p-8 relative overflow-hidden">
               {/* Glow effect */}
@@ -497,7 +497,7 @@ const AuthScreen = () => {
         </div>
       </div>
 
-      <div id="recaptcha-container"></div>
+      <div id="recaptcha-container" className="absolute bottom-0 left-0 pointer-events-none opacity-0"></div>
     </div>
   );
 };
