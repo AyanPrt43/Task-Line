@@ -400,14 +400,21 @@ function App() {
     document.querySelector("html").classList.add(themeMode);
     localStorage.setItem("themeMode", themeMode);
 
-    // Update theme-color meta tag dynamically to match the app's top gradient color
+    // Only force theme-color in PWA standalone mode
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
     let metaThemeColor = document.querySelector("meta[name=theme-color]");
-    if (!metaThemeColor) {
-      metaThemeColor = document.createElement("meta");
-      metaThemeColor.name = "theme-color";
-      document.head.appendChild(metaThemeColor);
+
+    if (isStandalone) {
+      if (!metaThemeColor) {
+        metaThemeColor = document.createElement("meta");
+        metaThemeColor.name = "theme-color";
+        document.head.appendChild(metaThemeColor);
+      }
+      metaThemeColor.content = themeMode === "dark" ? "#3a3532" : "#c8b3a6";
+    } else if (metaThemeColor) {
+      // Remove it in browser mode so Safari's native translucent bars show the content underneath
+      metaThemeColor.remove();
     }
-    metaThemeColor.content = themeMode === "dark" ? "#3a3532" : "#c8b3a6";
   }, [themeMode]);
 
   const filteredTasks = getFilteredTasks();
