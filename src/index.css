@@ -2,10 +2,21 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 html,
-body {
+body,
+#root {
   height: 100%;
   width: 100%;
   overscroll-behavior-y: none;
+}
+
+/* For standalone PWA mode, set background to prevent white overscroll */
+@media (display-mode: standalone) {
+  html, body {
+    background-color: #c8b3a6;
+  }
+  html.dark, body.dark {
+    background-color: #3a3532;
+  }
 }
 
 /* For dark mode fallback */
