@@ -497,7 +497,10 @@ const AuthScreen = () => {
         </div>
       </div>
 
-      <div id="recaptcha-container" className="absolute bottom-0 left-0 pointer-events-none opacity-0"></div>
+      <div
+        id="recaptcha-container"
+        className="absolute bottom-0 left-0 pointer-events-none opacity-0"
+      ></div>
     </div>
   );
 };
