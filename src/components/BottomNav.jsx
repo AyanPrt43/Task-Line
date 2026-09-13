@@ -69,7 +69,7 @@ const BottomNav = () => {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-white/20 dark:bg-black/20 backdrop-blur-[40px] z-40 md:hidden flex justify-between items-center px-1 sm:px-3 pt-3 pb-6 sm:pt-4 sm:pb-8 border-t border-white/50 dark:border-white/10 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] rounded-t-[32px]">
+    <div className="fixed bottom-0 left-0 w-full bg-white/20 dark:bg-black/20 backdrop-blur-[40px] z-40 md:hidden flex justify-between items-center px-1 sm:px-3 pt-3 pb-[calc(1.5rem+env(safe-area-inset-bottom))] sm:pt-4 sm:pb-[calc(2rem+env(safe-area-inset-bottom))] border-t border-white/50 dark:border-white/10 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] rounded-t-[32px]">
       {tabs.map((tab) => {
         const isActive = filter === tab.id;
         return (
