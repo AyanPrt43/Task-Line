@@ -179,8 +179,8 @@ const AuthScreen = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-md overflow-y-auto perspective-[1000px]">
-      <div className="flex min-h-[100dvh] items-center justify-center p-4">
+    <div className="fixed top-0 left-0 w-full h-screen h-[100dvh] z-[100] bg-black/40 backdrop-blur-md overflow-y-auto perspective-[1000px]">
+      <div className="flex min-h-screen min-h-[100dvh] items-center justify-center p-4">
         {/* 3D Flip Container */}
         <div
           className={`relative w-full max-w-md transition-transform duration-700 preserve-3d grid ${isFlipped ? "rotate-y-180" : ""}`}
@@ -497,10 +497,7 @@ const AuthScreen = () => {
         </div>
       </div>
 
-      <div
-        id="recaptcha-container"
-        className="absolute bottom-0 left-0 pointer-events-none opacity-0"
-      ></div>
+      <div id="recaptcha-container" className="absolute bottom-0 left-0 pointer-events-none opacity-0"></div>
     </div>
   );
 };
