@@ -1,13 +1,20 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Task-Line Backend API",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "dev": "node --watch server.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "task-manager",
+    "node",
+    "express",
+    "mongodb",
+    "rest-api"
+  ],
+  "author": "Ayan Pratap Sonker",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
