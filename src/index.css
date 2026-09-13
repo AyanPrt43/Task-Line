@@ -2,20 +2,10 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 html,
-body,
-#root {
-  min-height: 100vh; /* Fallback for older iOS */
-  min-height: 100dvh;
+body {
+  height: 100%;
   width: 100%;
   overscroll-behavior-y: none;
-}
-
-/* Base background colors to prevent white voids if root collapses */
-body {
-  background-color: #749f99; /* Light mode bottom color */
-}
-body.dark {
-  background-color: #223d38; /* Dark mode bottom color */
 }
 
 /* For standalone PWA mode, set background to prevent white overscroll */

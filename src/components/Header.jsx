@@ -50,7 +50,7 @@ const Header = ({ onMenuToggle }) => {
   };
 
   return (
-    <div className="relative z-50 w-full pt-[max(env(safe-area-inset-top),_1rem)] bg-white/20 dark:bg-black/20 backdrop-blur-md flex flex-col justify-end shrink-0 border-b md:border-b-0 md:border-l border-white/40 dark:border-white/10">
+    <div className="relative z-50 w-full bg-white/20 dark:bg-black/20 backdrop-blur-md flex flex-col justify-end shrink-0 border-b md:border-b-0 md:border-l border-white/40 dark:border-white/10">
       <div className="h-14 sm:h-16 w-full flex gap-2 sm:gap-3 justify-end items-center px-3 sm:px-6">
         
         {/* Hamburger menu removed for mobile as sidebar is disabled */}

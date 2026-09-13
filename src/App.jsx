@@ -447,7 +447,7 @@ function App() {
         setTaskSortBy,
       }}
     >
-      <div className="min-h-screen min-h-[100dvh] w-full flex flex-col md:flex-row relative overflow-hidden bg-gradient-to-br from-[#c8b3a6] via-[#aabdb5] to-[#749f99] dark:from-[#3a3532] dark:via-[#2f3d37] dark:to-[#223d38] pb-[env(safe-area-inset-bottom)]">
+      <div className="h-full w-full flex flex-col md:flex-row relative overflow-hidden bg-gradient-to-br from-[#c8b3a6] via-[#aabdb5] to-[#749f99] dark:from-[#3a3532] dark:via-[#2f3d37] dark:to-[#223d38] pb-[env(safe-area-inset-bottom)]">
         <div
           className={`
             hidden md:block relative inset-y-0 left-0 z-[60] h-full transition-all duration-300 ease-in-out shrink-0
