@@ -1,0 +1,71 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+html,
+body {
+  background: linear-gradient(135deg, #c8b3a6 0%, #aabdb5 52%, #749f99 100%);
+}
+
+body {
+  height: 100dvh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+#root {
+  height: 100dvh;
+  width: 100%;
+  background-color: transparent;
+}
+
+/* Removed desktop max-width/height to allow full screen layout */
+
+
+@layer utilities {
+
+  .scrollbar-glass::-webkit-scrollbar {
+    width: 11px;
+    height: 0px; /* Bottom scrollbar hidden */
+  }
+
+  .scrollbar-glass::-webkit-scrollbar-track {
+    background: transparent;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 30px;
+  }
+
+  .scrollbar-glass::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.403);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    backdrop-filter: blur(10px);
+  }
+
+  .scrollbar-glass::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.55);
+    background-clip: padding-box;
+  }
+
+  .scrollbar-glass::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .backface-hidden {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+}
