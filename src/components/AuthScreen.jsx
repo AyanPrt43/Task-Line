@@ -123,7 +123,11 @@ const AuthScreen = () => {
       );
       setConfirmationResult(confirmation);
     } catch (err) {
-      setError(err.message);
+      if (err.code === "auth/billing-not-enabled" || err.message.includes("auth/billing-not-enabled")) {
+        setError("Currently mobile authentication is under development. Please sign up with email.");
+      } else {
+        setError(err.message);
+      }
     } finally {
       setLoading(false);
     }
