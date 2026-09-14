@@ -511,6 +511,9 @@ const AuthScreen = () => {
                 >
                   {loading ? "Creating Account..." : "Sign Up"}
                 </button>
+                <p className="text-[11px] leading-tight text-black/50 dark:text-white/50 text-center pt-2">
+                  Verification email may go to your spam folder. Please mark it as 'Not Spam'.
+                </p>
               </form>
 
               <p
