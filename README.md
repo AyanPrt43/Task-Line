@@ -224,19 +224,19 @@ Task-Line provides a responsive interface with dedicated experiences for desktop
 
 ## 🖥️ Desktop — Light Mode
 
-![Task-Line Desktop Light Mode](./Public/Desktop-Light.png)
+![Task-Line Desktop Light Mode](./public/Desktop-Light.png)
 
 ## 🖥️ Desktop — Dark Mode
 
-![Task-Line Desktop Dark Mode](./Public/Desktop-Dark.png)
+![Task-Line Desktop Dark Mode](./public/Desktop-Dark.png)
 
 ## 📱 Mobile — Light Mode
 
-![Task-Line Mobile Light Mode](./Public/Mobile-Light.jpg)
+![Task-Line Mobile Light Mode](./public/Mobile-Light.jpg)
 
 ## 📱 Mobile — Dark Mode
 
-![Task-Line Mobile Dark Mode](./Public/Mobile-Dark.jpg)
+![Task-Line Mobile Dark Mode](./public/Mobile-Dark.jpg)
 ---
 
 # 🏗️ Application Architecture
