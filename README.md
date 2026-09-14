@@ -15,10 +15,11 @@
 ## 🌐 Live Application
 
 **Live Demo:**  
-[Add your deployed frontend URL here]
+[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-Task--Line-0f766e?style=for-the-badge)](https://task-line-git-main-ayan-298e.vercel.app/)
+
 
 **Backend API:**  
-[Add your deployed backend URL here]
+[![Backend API](https://img.shields.io/badge/⚙️%20Backend%20API-Render-111827?style=for-the-badge)](https://task-line-1trj.onrender.com)
 
 **GitHub Repository:**  
 https://github.com/AyanPrt43/Task-Line
@@ -216,6 +217,26 @@ The layout adapts according to the available screen size while maintaining usabi
 - VS Code
 - Postman
 
+---
+**# 📸 Screenshots
+
+Task-Line provides a responsive interface with dedicated experiences for desktop and mobile devices, including both light and dark themes.
+
+## 🖥️ Desktop — Light Mode
+
+![Task-Line Desktop Light Mode](./Public/Desktop-Light.png)
+
+## 🖥️ Desktop — Dark Mode
+
+![Task-Line Desktop Dark Mode](./Public/Desktop-Dark.png)
+
+## 📱 Mobile — Light Mode
+
+![Task-Line Mobile Light Mode](./Public/Mobile-Light.jpg)
+
+## 📱 Mobile — Dark Mode
+
+![Task-Line Mobile Dark Mode](./Public/Mobile-Dark.jpg)
 ---
 
 # 🏗️ Application Architecture
@@ -841,7 +862,10 @@ Add mobile screenshot here
 
 # 🔮 Future Improvements
 
-Task-Line is designed to evolve into a more complete productivity and collaboration platform.
+- Notofication Feature
+- Remainders Section
+- Upcoming task notifications
+- Overdue task notifications
 
 ## 🔔 Reminders & Notifications — Coming Soon!
 
