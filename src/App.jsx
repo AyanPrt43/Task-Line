@@ -447,7 +447,7 @@ function App() {
         setTaskSortBy,
       }}
     >
-      <div className="min-h-[100dvh] w-full flex flex-col md:flex-row relative overflow-hidden bg-gradient-to-br from-[#c8b3a6] via-[#aabdb5] to-[#749f99] dark:from-[#3a3532] dark:via-[#2f3d37] dark:to-[#223d38]">
+      <div className="h-[100dvh] w-full flex flex-col md:flex-row relative overflow-hidden bg-gradient-to-br from-[#c8b3a6] via-[#aabdb5] to-[#749f99] dark:from-[#3a3532] dark:via-[#2f3d37] dark:to-[#223d38]">
         <div
           className={`
             hidden md:block relative inset-y-0 left-0 z-[60] h-full transition-all duration-300 ease-in-out shrink-0
@@ -485,7 +485,7 @@ function App() {
           </div>
         </div>
 
-        <div className="h-full w-full flex flex-col min-w-0 overflow-hidden">
+        <div className="flex-1 w-full flex flex-col min-w-0 overflow-hidden">
           <Header onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
 
           {filter !== "Trash" && <MainContent />}
