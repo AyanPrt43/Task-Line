@@ -3,87 +3,147 @@ const router = express.Router();
 const User = require('../models/User');
 const verifyAuth = require('../middleware/auth');
 
-// Protect routes
+// Protect all user routes
 router.use(verifyAuth);
 
-// Create or update a user profile after signup
+
+// CREATE OR UPDATE USER PROFILE AFTER SIGNUP
+// POST /api/users
 router.post('/', async (req, res) => {
   try {
-    const { firstName, lastName, nickname, avatar, email } = req.body;
-    
+    const {
+      firstName,
+      lastName,
+      nickname,
+      avatar,
+      email
+    } = req.body;
+
     // Check if user already exists
-    let user = await User.findOne({ firebaseUid: req.user.uid });
-    
+    let user = await User.findOne({
+      firebaseUid: req.user.uid
+    });
+
     if (user) {
-      // Update existing
+      // Update existing user
       user.firstName = firstName;
       user.lastName = lastName;
-      user.nickname = nickname;
-      user.avatar = avatar;
+      user.nickname = nickname || '';
+      user.avatar = avatar || '👤';
+      user.email = email || req.user.email;
+
       user = await user.save();
     } else {
-      // Create new
+      // Create new user
       user = new User({
         firebaseUid: req.user.uid,
         firstName,
         lastName,
-        nickname,
-        avatar,
-        email
+        nickname: nickname || '',
+        avatar: avatar || '👤',
+        email: email || req.user.email
       });
+
       await user.save();
     }
-    
+
     res.status(201).json(user);
+
   } catch (error) {
     console.error('Failed to save user profile:', error);
-    res.status(500).json({ error: 'Failed to save user profile' });
+
+    res.status(500).json({
+      error: 'Failed to save user profile'
+    });
   }
 });
 
-// Get the logged-in user's profile
+
+// GET LOGGED-IN USER PROFILE
+// GET /api/users/me
 router.get('/me', async (req, res) => {
   try {
-    let user = await User.findOne({ firebaseUid: req.user.uid });
+    const user = await User.findOne({
+      firebaseUid: req.user.uid
+    });
+
+    // Do NOT create a fake "User Account" profile
     if (!user) {
-      user = new User({
-        firebaseUid: req.user.uid,
-        email: req.user.email || 'unknown@example.com',
-        firstName: req.user.name ? req.user.name.split(' ')[0] : 'User',
-        lastName: req.user.name ? req.user.name.split(' ').slice(1).join(' ') : 'Account',
+      return res.status(404).json({
+        error: 'User profile not found'
       });
-      await user.save();
     }
+
     res.json(user);
+
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch user profile' });
+    console.error('Failed to fetch user profile:', error);
+
+    res.status(500).json({
+      error: 'Failed to fetch user profile'
+    });
   }
 });
 
-// Update the logged-in user's profile
+
+// UPDATE LOGGED-IN USER PROFILE
+// PUT /api/users/me
 router.put('/me', async (req, res) => {
   try {
-    const { nickname, avatar } = req.body;
-    let user = await User.findOne({ firebaseUid: req.user.uid });
-    
+    const {
+      firstName,
+      lastName,
+      nickname,
+      avatar
+    } = req.body;
+
+    let user = await User.findOne({
+      firebaseUid: req.user.uid
+    });
+
+    // If profile doesn't exist, create it using the
+    // actual data coming from the frontend
     if (!user) {
       user = new User({
         firebaseUid: req.user.uid,
         email: req.user.email || 'unknown@example.com',
-        firstName: req.user.name ? req.user.name.split(' ')[0] : 'User',
-        lastName: req.user.name ? req.user.name.split(' ').slice(1).join(' ') : 'Account',
+        firstName: firstName || '',
+        lastName: lastName || '',
+        nickname: nickname || '',
+        avatar: avatar || '👤'
       });
+    } else {
+
+      // Update only fields that were actually provided
+      if (firstName !== undefined) {
+        user.firstName = firstName;
+      }
+
+      if (lastName !== undefined) {
+        user.lastName = lastName;
+      }
+
+      if (nickname !== undefined) {
+        user.nickname = nickname;
+      }
+
+      if (avatar !== undefined) {
+        user.avatar = avatar;
+      }
     }
 
-    if (nickname !== undefined) user.nickname = nickname;
-    if (avatar !== undefined) user.avatar = avatar;
-
     await user.save();
+
     res.json(user);
+
   } catch (error) {
     console.error('Failed to update profile:', error);
-    res.status(500).json({ error: 'Failed to update profile' });
+
+    res.status(500).json({
+      error: 'Failed to update profile'
+    });
   }
 });
+
 
 module.exports = router;
