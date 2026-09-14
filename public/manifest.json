@@ -1,0 +1,17 @@
+{
+  "name": "Task Line",
+  "short_name": "Task Line",
+  "description": "Your ultimate task management app",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#c8b3a6",
+  "theme_color": "#c8b3a6",
+  "icons": [
+    {
+      "src": "/Logo.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
