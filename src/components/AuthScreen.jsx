@@ -9,6 +9,7 @@ import {
   sendEmailVerification,
 } from "firebase/auth";
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const avatars = ["👤", "🦊", "🐼", "🐯", "🚀", "🌟"];
 
@@ -87,8 +88,9 @@ const AuthScreen = () => {
 
       // 3. Save detailed profile to MongoDB backend
       const token = await user.getIdToken();
+
       await axios.post(
-        `http://${window.location.hostname}:5001/api/users`,
+        `${API_URL}/api/users`,
         {
           firstName,
           lastName,
@@ -497,7 +499,10 @@ const AuthScreen = () => {
         </div>
       </div>
 
-      <div id="recaptcha-container" className="absolute bottom-0 left-0 pointer-events-none opacity-0"></div>
+      <div
+        id="recaptcha-container"
+        className="absolute bottom-0 left-0 pointer-events-none opacity-0"
+      ></div>
     </div>
   );
 };

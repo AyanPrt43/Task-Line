@@ -129,7 +129,7 @@ const ProfileSettingsModal = ({ activeTab = "account", onClose }) => {
       const token = await auth.currentUser.getIdToken();
       for (const t of task) {
         await axios.delete(
-          `http://${window.location.hostname}:5001/api/tasks/${t._id || t.id}`,
+          `${API_URL}/api/tasks/${t._id || t.id}`,
           { headers: { Authorization: `Bearer ${token}` } },
         );
       }
