@@ -31,6 +31,8 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [taskSortBy, setTaskSortBy] = useState("default");
 
+  // ==================== THEME ====================
+
   const darkMode = () => {
     setThemeMode("dark");
   };
@@ -38,6 +40,8 @@ function App() {
   const lightMode = () => {
     setThemeMode("light");
   };
+
+  // ==================== AUTH HEADERS ====================
 
   const getHeaders = async () => {
     if (!auth.currentUser) return {};
@@ -51,7 +55,25 @@ function App() {
     };
   };
 
-  // Add Task
+  // ==================== SESSION EXPIRED ====================
+
+  const handleSessionExpired = async () => {
+    console.warn("Session expired. Logging out user...");
+
+    try {
+      await auth.signOut();
+    } catch (signOutError) {
+      console.error("Failed to sign out:", signOutError);
+    }
+
+    // Clear all user-related frontend state
+    setCurrentUser(null);
+    setUserProfile(null);
+    setTask([]);
+  };
+
+  // ==================== ADD TASK ====================
+
   const addTask = async (newTask) => {
     const today = new Date().toISOString().split("T")[0];
 
@@ -94,10 +116,15 @@ function App() {
       );
     } catch (err) {
       console.error("Failed to add task to DB", err);
+
+      if (err.response?.status === 401 || err.response?.status === 403) {
+        await handleSessionExpired();
+      }
     }
   };
 
-  // Update Task
+  // ==================== UPDATE TASK ====================
+
   const updateTask = async (id, updatedTask) => {
     setTask((prev) =>
       prev.map((t) => (t.id === id || t._id === id ? updatedTask : t)),
@@ -111,10 +138,15 @@ function App() {
       );
     } catch (err) {
       console.error("Failed to update task in DB", err);
+
+      if (err.response?.status === 401 || err.response?.status === 403) {
+        await handleSessionExpired();
+      }
     }
   };
 
-  // Soft Delete Task
+  // ==================== SOFT DELETE TASK ====================
+
   const deleteTask = async (id) => {
     setTask((prev) =>
       prev.map((t) =>
@@ -140,10 +172,15 @@ function App() {
       );
     } catch (err) {
       console.error("Failed to soft-delete task in DB", err);
+
+      if (err.response?.status === 401 || err.response?.status === 403) {
+        await handleSessionExpired();
+      }
     }
   };
 
-  // Permanently Delete Task
+  // ==================== PERMANENT DELETE TASK ====================
+
   const permanentDeleteTask = async (id) => {
     setTask((prev) => prev.filter((t) => t.id !== id && t._id !== id));
 
@@ -151,10 +188,15 @@ function App() {
       await axios.delete(`${API_URL}/api/tasks/${id}`, await getHeaders());
     } catch (err) {
       console.error("Failed to delete task from DB", err);
+
+      if (err.response?.status === 401 || err.response?.status === 403) {
+        await handleSessionExpired();
+      }
     }
   };
 
-  // Restore Task
+  // ==================== RESTORE TASK ====================
+
   const restoreTask = async (id) => {
     setTask((prev) =>
       prev.map((t) =>
@@ -180,12 +222,19 @@ function App() {
       );
     } catch (err) {
       console.error("Failed to restore task", err);
+
+      if (err.response?.status === 401 || err.response?.status === 403) {
+        await handleSessionExpired();
+      }
     }
   };
 
-  // Toggle Completed
+  // ==================== TOGGLE COMPLETED ====================
+
   const toggleCompleted = async (id) => {
     const t = task.find((t) => t.id === id || t._id === id);
+
+    if (!t) return;
 
     const updated = {
       ...t,
@@ -204,12 +253,19 @@ function App() {
       );
     } catch (err) {
       console.error("Failed to toggle completion", err);
+
+      if (err.response?.status === 401 || err.response?.status === 403) {
+        await handleSessionExpired();
+      }
     }
   };
 
-  // Toggle Important
+  // ==================== TOGGLE IMPORTANT ====================
+
   const toggleImportant = async (id) => {
     const t = task.find((t) => t.id === id || t._id === id);
+
+    if (!t) return;
 
     const updated = {
       ...t,
@@ -228,12 +284,19 @@ function App() {
       );
     } catch (err) {
       console.error("Failed to toggle importance", err);
+
+      if (err.response?.status === 401 || err.response?.status === 403) {
+        await handleSessionExpired();
+      }
     }
   };
 
-  // Set Task Date
+  // ==================== SET TASK DATE ====================
+
   const setTaskDate = async (id, date) => {
     const t = task.find((t) => t.id === id || t._id === id);
+
+    if (!t) return;
 
     const updated = {
       ...t,
@@ -252,17 +315,23 @@ function App() {
       );
     } catch (err) {
       console.error("Failed to set task date", err);
+
+      if (err.response?.status === 401 || err.response?.status === 403) {
+        await handleSessionExpired();
+      }
     }
   };
 
-  // Get Today's Date
+  // ==================== GET TODAY'S DATE ====================
+
   const getTodayString = () => {
     const today = new Date();
 
     return today.toISOString().split("T")[0];
   };
 
-  // Get Tomorrow's Date
+  // ==================== GET TOMORROW'S DATE ====================
+
   const getTomorrowString = () => {
     const tomorrow = new Date();
 
@@ -271,7 +340,8 @@ function App() {
     return tomorrow.toISOString().split("T")[0];
   };
 
-  // Filter Tasks
+  // ==================== FILTER TASKS ====================
+
   const getFilteredTasks = () => {
     const today = getTodayString();
     const tomorrow = getTomorrowString();
@@ -346,80 +416,123 @@ function App() {
     return filtered;
   };
 
-  // Listen for Authentication State
+  // ==================== AUTHENTICATION STATE ====================
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setCurrentUser(user);
+      setAuthLoading(true);
 
-      setAuthLoading(false);
-
-      if (user) {
-        try {
-          const token = await user.getIdToken();
-
-          // Fetch Profile
-          const profileRes = await axios.get(`${API_URL}/api/users/me`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-
-          setUserProfile(profileRes.data);
-
-          // Fetch Tasks
-          const res = await axios.get(`${API_URL}/api/tasks`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-
-          // Map MongoDB _id to id
-          const tasksFromServer = res.data.map((t) => ({
-            ...t,
-            id: t._id,
-          }));
-
-          setTask(tasksFromServer);
-        } catch (err) {
-          console.error("Failed to fetch user data from server", err);
-        }
-      } else {
-        // User logged out
+      if (!user) {
+        // User is logged out
+        setCurrentUser(null);
+        setUserProfile(null);
         setTask([]);
 
-        setUserProfile(null);
+        setAuthLoading(false);
+
+        return;
+      }
+
+      try {
+        // Get fresh Firebase ID token
+        const token = await user.getIdToken();
+
+        // ==================== FETCH PROFILE ====================
+
+        const profileRes = await axios.get(`${API_URL}/api/users/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setUserProfile(profileRes.data);
+
+        // ==================== FETCH TASKS ====================
+
+        const res = await axios.get(`${API_URL}/api/tasks`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Map MongoDB _id to id
+        const tasksFromServer = res.data.map((t) => ({
+          ...t,
+          id: t._id,
+        }));
+
+        // User and token are valid
+        setCurrentUser(user);
+        setTask(tasksFromServer);
+      } catch (err) {
+        console.error("Session validation failed:", err);
+
+        // Backend rejected Firebase token
+        if (err.response?.status === 401 || err.response?.status === 403) {
+          console.warn("Invalid or expired session. Logging out...");
+
+          try {
+            await auth.signOut();
+          } catch (signOutError) {
+            console.error("Failed to sign out:", signOutError);
+          }
+
+          // Clear all frontend state
+          setCurrentUser(null);
+          setUserProfile(null);
+          setTask([]);
+        } else {
+          // Network/server error
+          console.error("Server or network error:", err);
+        }
+      } finally {
+        setAuthLoading(false);
       }
     });
 
     return () => unsubscribe();
   }, []);
 
-  // Theme Management
+  // ==================== THEME MANAGEMENT ====================
+
   useEffect(() => {
     document.querySelector("html").classList.remove("light", "dark");
+
     document.querySelector("html").classList.add(themeMode);
+
     localStorage.setItem("themeMode", themeMode);
 
     // Only force theme-color in PWA standalone mode
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    const isStandalone =
+      window.matchMedia("(display-mode: standalone)").matches ||
+      window.navigator.standalone;
+
     let metaThemeColor = document.querySelector("meta[name=theme-color]");
 
     if (isStandalone) {
       if (!metaThemeColor) {
         metaThemeColor = document.createElement("meta");
+
         metaThemeColor.name = "theme-color";
+
         document.head.appendChild(metaThemeColor);
       }
+
       metaThemeColor.content = themeMode === "dark" ? "#3a3532" : "#c8b3a6";
     } else if (metaThemeColor) {
-      // Remove it in browser mode so Safari's native translucent bars show the content underneath
+      // Remove it in browser mode so Safari's native
+      // translucent bars show the content underneath
       metaThemeColor.remove();
     }
   }, [themeMode]);
 
+  // ==================== FILTERED TASKS ====================
+
   const filteredTasks = getFilteredTasks();
 
   const trashCount = task.filter((t) => t.deleted).length;
+
+  // ==================== UI ====================
 
   return (
     <Provider
@@ -448,6 +561,8 @@ function App() {
       }}
     >
       <div className="h-[100dvh] w-full flex flex-col md:flex-row relative overflow-hidden bg-gradient-to-br from-[#c8b3a6] via-[#aabdb5] to-[#749f99] dark:from-[#3a3532] dark:via-[#2f3d37] dark:to-[#223d38]">
+        {/* ==================== SIDEBAR ==================== */}
+
         <div
           className={`
             hidden md:block relative inset-y-0 left-0 z-[60] h-full transition-all duration-300 ease-in-out shrink-0
@@ -461,6 +576,7 @@ function App() {
             />
 
             {/* Collapse Toggle Arrow */}
+
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className="hidden md:flex absolute -right-5 top-6 z-50 w-5 h-12 bg-black/30 backdrop-blur-2xl rounded-r-md items-center justify-center text-white/70 hover:text-white transition-all duration-300 cursor-pointer hover:bg-black/40"
@@ -485,12 +601,16 @@ function App() {
           </div>
         </div>
 
+        {/* ==================== MAIN CONTENT ==================== */}
+
         <div className="flex-1 w-full flex flex-col min-w-0 overflow-hidden">
           <Header onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
 
           {filter !== "Trash" && <MainContent />}
 
           <div className="flex-1 min-h-0 w-full bg-white/10 dark:bg-black/20 p-3 pb-[100px] sm:p-5 sm:pb-[100px] md:pb-5 overflow-y-auto scrollbar-glass">
+            {/* ==================== EMPTY TRASH ==================== */}
+
             {filter === "Trash" && filteredTasks.length === 0 && (
               <div className="flex flex-col items-center justify-center h-full text-black/40 dark:text-white/30">
                 <svg
@@ -514,6 +634,8 @@ function App() {
               </div>
             )}
 
+            {/* ==================== NO TASKS ==================== */}
+
             {filteredTasks.length === 0 && filter !== "Trash" && (
               <div className="flex flex-col items-center justify-center h-full text-center">
                 <div className="w-40 h-40 mb-6 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center text-black/40 dark:text-white/30">
@@ -529,16 +651,22 @@ function App() {
                     strokeLinejoin="round"
                   >
                     <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+
                     <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+
                     <path d="M8 10l1.5 1.5L12 9"></path>
                     <path d="M14 10h3"></path>
+
                     <path d="M8 14l1.5 1.5L12 13"></path>
                     <path d="M14 14h3"></path>
+
                     <path d="M8 18l1.5 1.5L12 17"></path>
                     <path d="M14 18h3"></path>
+
                     <path d="M2 12h2"></path>
                     <path d="M4 16l1.5-1.5"></path>
                     <path d="M4 8l1.5 1.5"></path>
+
                     <path d="M22 12h-2"></path>
                     <path d="M20 16l-1.5-1.5"></path>
                     <path d="M20 8l-1.5 1.5"></path>
@@ -555,6 +683,8 @@ function App() {
               </div>
             )}
 
+            {/* ==================== TASK LIST ==================== */}
+
             {filteredTasks.map((t) => (
               <NewTasks
                 key={t.id || t._id}
@@ -565,10 +695,16 @@ function App() {
           </div>
         </div>
 
+        {/* ==================== BOTTOM NAV ==================== */}
+
         <BottomNav />
       </div>
 
+      {/* ==================== AUTH SCREEN ==================== */}
+
       {!currentUser && !authLoading && <AuthScreen />}
+
+      {/* ==================== EMAIL VERIFICATION ==================== */}
 
       {currentUser &&
         !currentUser.emailVerified &&
@@ -592,10 +728,15 @@ function App() {
               </button>
 
               <button
-                onClick={() => {
-                  auth.signOut().then(() => {
-                    window.location.reload();
-                  });
+                onClick={async () => {
+                  try {
+                    await auth.signOut();
+                    setCurrentUser(null);
+                    setUserProfile(null);
+                    setTask([]);
+                  } catch (err) {
+                    console.error("Sign out failed:", err);
+                  }
                 }}
                 className="w-full bg-red-500/10 text-red-600 dark:text-red-400 rounded-xl py-3 font-bold hover:bg-red-500/20 transition-colors"
               >
